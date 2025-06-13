@@ -98,7 +98,7 @@ npm start
 - DUK reitingavimas paspaudus „Patikima“ (rezultatas matomas iškart)
 - Administratoriaus panelė: vartotojų, bilietų ir DUK valdymas
 - SPA (Single Page Application) su React Router
-- Bootstrap dizainas, pritaikyta mobiliesiems
+- **Dizainas:** Naudojama [Bootswatch Lux tema](https://bootswatch.com/lux/). Visi mygtukai, kortelės ir sąsajos elementai pritaikyti šiai temai, todėl sistema atrodo moderniai ir yra patogi naudoti tiek kompiuteryje, tiek mobiliuosiuose įrenginiuose.
 
 ## API endpoint'ai
 

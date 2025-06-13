@@ -77,65 +77,68 @@ function AdminPanel() {
       ) : tickets.length === 0 ? (
         <div>Užklausų nėra.</div>
       ) : (
-        <ul className="list-group">
+        <div className="row">
           {tickets.map((t) => (
-            <li key={t.id} className="list-group-item mb-2">
-              <b>{t.title}</b> <br />
-              {t.description} <br />
-              <span className="badge bg-info text-dark">
-                Statusas: {t.status}
-              </span>
-              <br />
-              <span className="badge bg-secondary">
-                Klientas: {t.User?.username}
-              </span>
-              <div className="mt-2">
-                <select
-                  className="form-select form-select-sm w-auto d-inline"
-                  value={statusUpdate[t.id] || t.status}
-                  onChange={(e) =>
-                    setStatusUpdate((prev) => ({
-                      ...prev,
-                      [t.id]: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="pateiktas">pateiktas</option>
-                  <option value="svarstomas">svarstomas</option>
-                  <option value="ispręstas">ispręstas</option>
-                </select>
-                <button
-                  className="btn btn-sm btn-outline-primary ms-2"
-                  onClick={() =>
-                    handleStatusChange(t.id, statusUpdate[t.id] || t.status)
-                  }
-                >
-                  Keisti statusą
-                </button>
+            <div key={t.id} className="col-md-6 mb-4">
+              <div className="card shadow-sm h-100">
+                <div className="card-body">
+                  <h5 className="card-title">{t.title}</h5>
+                  <p className="card-text">{t.description}</p>
+                  <span className="badge bg-info text-dark me-2">
+                    Statusas: {t.status}
+                  </span>
+                  <span className="badge bg-secondary">
+                    Klientas: {t.User?.username}
+                  </span>
+                  <div className="mt-3">
+                    <select
+                      className="form-select form-select-sm w-auto d-inline"
+                      value={statusUpdate[t.id] || t.status}
+                      onChange={(e) =>
+                        setStatusUpdate((prev) => ({
+                          ...prev,
+                          [t.id]: e.target.value,
+                        }))
+                      }
+                    >
+                      <option value="pateiktas">pateiktas</option>
+                      <option value="svarstomas">svarstomas</option>
+                      <option value="ispręstas">ispręstas</option>
+                    </select>
+                    <button
+                      className="btn btn-sm btn-outline-primary ms-2"
+                      onClick={() =>
+                        handleStatusChange(t.id, statusUpdate[t.id] || t.status)
+                      }
+                    >
+                      Keisti statusą
+                    </button>
+                  </div>
+                  <div className="mt-3">
+                    <textarea
+                      className="form-control"
+                      rows={2}
+                      placeholder="Atsakymas"
+                      value={answerText[t.id] || ""}
+                      onChange={(e) =>
+                        setAnswerText((prev) => ({
+                          ...prev,
+                          [t.id]: e.target.value,
+                        }))
+                      }
+                    />
+                    <button
+                      className="btn btn-sm btn-success mt-2"
+                      onClick={() => handleAnswer(t.id)}
+                    >
+                      Atsakyti
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="mt-2">
-                <textarea
-                  className="form-control"
-                  rows={2}
-                  placeholder="Atsakymas"
-                  value={answerText[t.id] || ""}
-                  onChange={(e) =>
-                    setAnswerText((prev) => ({
-                      ...prev,
-                      [t.id]: e.target.value,
-                    }))
-                  }
-                />
-                <button
-                  className="btn btn-sm btn-success mt-1"
-                  onClick={() => handleAnswer(t.id)}
-                >
-                  Atsakyti
-                </button>
-              </div>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
       <button className="btn btn-link mt-2" onClick={fetchTickets}>
         Atnaujinti

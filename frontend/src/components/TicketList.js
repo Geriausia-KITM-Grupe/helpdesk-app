@@ -33,17 +33,21 @@ function TicketList({ refresh }) {
       ) : tickets.length === 0 ? (
         <div>Užklausų nėra.</div>
       ) : (
-        <ul className="list-group">
+        <div className="row">
           {tickets.map((t) => (
-            <li key={t.id} className="list-group-item">
-              <b>{t.title}</b> <br />
-              {t.description} <br />
-              <span className="badge bg-info text-dark">
-                Statusas: {t.status}
-              </span>
-            </li>
+            <div key={t.id} className="col-md-12 mb-3">
+              <div className="card border-0 shadow-sm">
+                <div className="card-body">
+                  <h5 className="card-title">{t.title}</h5>
+                  <p className="card-text">{t.description}</p>
+                  <span className="badge bg-info text-dark">
+                    Statusas: {t.status}
+                  </span>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
       <button className="btn btn-link mt-2" onClick={fetchTickets}>
         Atnaujinti

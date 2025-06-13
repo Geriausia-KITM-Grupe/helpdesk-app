@@ -29,8 +29,12 @@ function RegisterForm({ onRegister }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Registracija</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="p-4 card shadow-sm mx-auto"
+      style={{ maxWidth: 400 }}
+    >
+      <h2 className="mb-3 text-center">Registracija</h2>
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
       <div className="mb-3">
@@ -51,7 +55,7 @@ function RegisterForm({ onRegister }) {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button className="btn btn-success" type="submit">
+      <button className="btn btn-success w-100" type="submit">
         Registruotis
       </button>
     </form>

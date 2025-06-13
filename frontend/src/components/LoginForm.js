@@ -28,8 +28,12 @@ function LoginForm({ onLogin }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Prisijungimas</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="p-4 card shadow-sm mx-auto"
+      style={{ maxWidth: 400 }}
+    >
+      <h2 className="mb-3 text-center">Prisijungimas</h2>
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="mb-3">
         <input
@@ -49,7 +53,7 @@ function LoginForm({ onLogin }) {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button className="btn btn-primary" type="submit">
+      <button className="btn btn-primary w-100" type="submit">
         Prisijungti
       </button>
     </form>

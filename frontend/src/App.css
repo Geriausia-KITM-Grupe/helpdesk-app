@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+body {
+  background: linear-gradient(135deg, #f8fafc 0%, #e3e9f7 100%);
+  min-height: 100vh;
+}
+
+.card {
+  border-radius: 16px;
+  border: none;
+}
+
+h1,
+h2,
+h4 {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.btn-link {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+input,
+textarea,
+.form-control {
+  border-radius: 8px !important;
+}
+
+.alert {
+  border-radius: 8px;
+}

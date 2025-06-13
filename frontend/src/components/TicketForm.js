@@ -35,10 +35,10 @@ function TicketForm({ onTicketCreated }) {
 
   return (
     <form onSubmit={handleSubmit} className="mb-4">
-      <h4>Nauja užklausa</h4>
+      <h4 className="mb-3">Nauja užklausa</h4>
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
-      <div className="mb-2">
+      <div className="mb-3">
         <input
           type="text"
           className="form-control"
@@ -47,15 +47,16 @@ function TicketForm({ onTicketCreated }) {
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
-      <div className="mb-2">
+      <div className="mb-3">
         <textarea
           className="form-control"
           placeholder="Aprašymas"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          rows={3}
         />
       </div>
-      <button className="btn btn-primary" type="submit">
+      <button className="btn btn-primary w-100" type="submit">
         Registruoti
       </button>
     </form>
