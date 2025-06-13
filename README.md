@@ -36,6 +36,14 @@ helpdesk-app/
    node server.js
    ```
 
+### Backend paleidimas (alternatyva)
+
+Jei `backend/package.json` yra `start` scriptas, serverį galite paleisti ir taip:
+
+```sh
+npm start
+```
+
 ### 2. Frontend paleidimas
 
 1. Eikite į `frontend` aplanką:
@@ -56,12 +64,55 @@ helpdesk-app/
 1. Sukurkite MySQL duomenų bazę pagal `backend/database/mysql.sql` faile pateiktą struktūrą.
 2. Nustatykite prisijungimo duomenis faile `backend/config/db.js`.
 
+### .env failo pavyzdys (backend kataloge)
+
+```
+DB_NAME=helpdesk
+DB_USER=root
+DB_PASS=JŪSŲ_SLAPTAŽODIS
+DB_HOST=localhost
+JWT_SECRET=slaptas_raktas
+```
+
+### Prisijungimo duomenys
+
+- **Administratorius:** užregistruokite vartotoją ir pakeiskite jo rolę į `admin` duomenų bazėje:
+  ```sql
+  UPDATE Users SET role='admin' WHERE username='admin';
+  ```
+- **Klientas:** registruokite per registracijos formą.
+
 ## Funkcionalumas
 
 - Vartotojų registracija ir prisijungimas
 - Bilietų kūrimas, peržiūra ir valdymas
 - DUK paieška ir peržiūra
 - Administratoriaus panelė: vartotojų, bilietų ir DUK valdymas
+
+## API endpoint'ai
+
+### Vartotojai (`/api/users`)
+
+- `POST /register` – registracija
+- `POST /login` – prisijungimas
+
+### Bilietai (`/api/tickets`)
+
+- `POST /` – sukurti naują bilietą (klientas)
+- `GET /my` – gauti savo bilietus (klientas)
+- `GET /` – gauti visus bilietus (admin)
+- `PATCH /:id/status` – keisti bilieto statusą (admin)
+
+### DUK (`/api/faq`)
+
+- `GET /` – gauti visus DUK (galima filtruoti pagal kategoriją ar paiešką)
+- `POST /` – pridėti naują DUK (admin)
+- `PATCH /:id/trust` – reitinguoti atsakymą
+
+### Atsakymai (`/api/answers`)
+
+- `POST /` – pridėti atsakymą į bilietą (admin)
+- `GET /ticket/:ticketId` – gauti visus atsakymus pagal bilieto ID
 
 ## Darbo su GitHub instrukcija
 
