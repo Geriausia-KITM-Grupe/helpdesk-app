@@ -22,12 +22,10 @@ router.post("/register", async (req, res) => {
       password: hash,
       role: role || "client",
     });
-    res
-      .status(201)
-      .json({
-        msg: "Registracija sėkminga",
-        user: { id: user.id, username: user.username, role: user.role },
-      });
+    res.status(201).json({
+      msg: "Registracija sėkminga",
+      user: { id: user.id, username: user.username, role: user.role },
+    });
   } catch (err) {
     res.status(500).json({ msg: "Serverio klaida", error: err.message });
   }

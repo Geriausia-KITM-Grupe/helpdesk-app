@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function TicketList() {
+function TicketList({ refresh }) {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,8 @@ function TicketList() {
 
   useEffect(() => {
     fetchTickets();
-  }, []);
+    // eslint-disable-next-line
+  }, [refresh]);
 
   return (
     <div>

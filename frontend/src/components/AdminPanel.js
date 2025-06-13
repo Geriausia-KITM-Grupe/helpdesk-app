@@ -63,6 +63,7 @@ function AdminPanel() {
       if (res.ok) {
         setMessage("Atsakymas išsiųstas!");
         setAnswerText((prev) => ({ ...prev, [ticketId]: "" }));
+        fetchTickets();
       }
     } catch {}
   };

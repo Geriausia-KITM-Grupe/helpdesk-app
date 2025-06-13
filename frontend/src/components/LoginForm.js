@@ -17,6 +17,7 @@ function LoginForm({ onLogin }) {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
         onLogin(data.user);
       } else {
         setError(data.msg || "Prisijungimo klaida");

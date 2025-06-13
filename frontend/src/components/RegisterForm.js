@@ -19,7 +19,7 @@ function RegisterForm({ onRegister }) {
       const data = await res.json();
       if (res.ok) {
         setSuccess("Registracija sėkminga! Galite prisijungti.");
-        onRegister && onRegister();
+        setTimeout(() => onRegister && onRegister(), 1200);
       } else {
         setError(data.msg || "Registracijos klaida");
       }

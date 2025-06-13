@@ -27,11 +27,23 @@ helpdesk-app/
    ```sh
    cd backend
    ```
-2. Įdiekite priklausomybes:
+2. **Sukurkite `.env` failą su duomenų bazės prisijungimo duomenimis (privaloma prieš paleidžiant backend):**
+   ```env
+   DB_NAME=helpdesk
+   DB_USER=root
+   DB_PASS=JŪSŲ_SLAPTAŽODIS
+   DB_HOST=localhost
+   JWT_SECRET=slaptas_raktas
+   ```
+3. **Sukurkite duomenų bazę pagal `backend/database/mysql.sql` (naudokite šią komandą):**
+   ```sh
+   mysql -u root -p < backend/database/mysql.sql
+   ```
+4. Įdiekite priklausomybes:
    ```sh
    npm install
    ```
-3. Paleiskite serverį:
+5. Paleiskite serverį:
    ```sh
    node server.js
    ```
@@ -59,35 +71,34 @@ npm start
    npm start
    ```
 
+> **Svarbu:** Backend ir frontend turi būti paleisti vienu metu (skirtinguose terminaluose ar langeliuose), kad sistema veiktų tinkamai.
+
+> **API adresas:** Visi užklausimai turi būti nukreipti į http://localhost:5000. Jei keisite backend porto numerį, atitinkamai pakeiskite ir frontend fetch užklausų adresus.
+
 ### 3. Duomenų bazės paruošimas
 
-1. Sukurkite MySQL duomenų bazę pagal `backend/database/mysql.sql` faile pateiktą struktūrą.
-2. Nustatykite prisijungimo duomenis faile `backend/config/db.js`.
-
-### .env failo pavyzdys (backend kataloge)
-
-```
-DB_NAME=helpdesk
-DB_USER=root
-DB_PASS=JŪSŲ_SLAPTAŽODIS
-DB_HOST=localhost
-JWT_SECRET=slaptas_raktas
-```
+1. Sukurkite MySQL duomenų bazę pagal `backend/database/mysql.sql` faile pateiktą struktūrą (žr. žingsnį aukščiau).
+2. Nustatykite prisijungimo duomenis faile `backend/config/db.js` **arba naudokite .env failą**.
 
 ### Prisijungimo duomenys
 
-- **Administratorius:** užregistruokite vartotoją ir pakeiskite jo rolę į `admin` duomenų bazėje:
+- **Administratorius:** užregistruokite vartotoją per registracijos formą ir pakeiskite jo rolę į `admin` duomenų bazėje:
   ```sql
   UPDATE Users SET role='admin' WHERE username='admin';
   ```
 - **Klientas:** registruokite per registracijos formą.
 
+> Vartotojų slaptažodžiai duomenų bazėje saugomi užšifruoti (hashuoti su bcrypt).
+
 ## Funkcionalumas
 
 - Vartotojų registracija ir prisijungimas
 - Bilietų kūrimas, peržiūra ir valdymas
-- DUK paieška ir peržiūra
+- DUK paieška ir peržiūra (galima filtruoti pagal kategoriją ar paiešką)
+- DUK reitingavimas paspaudus „Patikima“ (rezultatas matomas iškart)
 - Administratoriaus panelė: vartotojų, bilietų ir DUK valdymas
+- SPA (Single Page Application) su React Router
+- Bootstrap dizainas, pritaikyta mobiliesiems
 
 ## API endpoint'ai
 
@@ -148,3 +159,7 @@ El. paštas: [jūsų@email.com]
 ---
 
 > Jei turite klausimų ar pastebėjimų, drąsiai kreipkitės!
+
+## Dažniausios problemos
+
+- Jei neveikia prisijungimas ar API, patikrinkite ar backend ir frontend veikia, ar teisingai nurodytas API adresas (http://localhost:5000).
