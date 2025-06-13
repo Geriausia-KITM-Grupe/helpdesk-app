@@ -1,19 +1,10 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const app = express();
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
 
-app.use(cors());
-app.use(express.json());
-
-// Paprastas test route
-app.get("/", (req, res) => {
-  res.send("Helpdesk API veikia!");
+const User = sequelize.define("User", {
+  username: { type: DataTypes.STRING, unique: true, allowNull: false },
+  password: { type: DataTypes.STRING, allowNull: false },
+  role: { type: DataTypes.ENUM("admin", "client"), defaultValue: "client" },
 });
 
-// Pradėsime nuo user route (bus papildyta vėliau)
-const userRoutes = require("./routes/user");
-app.use("/api/users", userRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Serveris paleistas ant ${PORT}`));
+module.exports = User;
