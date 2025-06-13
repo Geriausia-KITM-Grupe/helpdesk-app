@@ -63,6 +63,32 @@ helpdesk-app/
 - DUK paieška ir peržiūra
 - Administratoriaus panelė: vartotojų, bilietų ir DUK valdymas
 
+## Darbo su GitHub instrukcija
+
+1. **Klonuokite projektą iš GitHub:**
+   ```sh
+   git clone https://github.com/jusu-vartotojas/jusu-repozitorija.git
+   cd jusu-repozitorija
+   ```
+2. **Sukurkite naują šaką (branch):**
+   ```sh
+   git checkout -b nauja-saka
+   ```
+3. **Atlikite reikiamus pakeitimus faile/failuose.**
+
+4. **Įtraukite pakeitimus į commit:**
+   ```sh
+   git add .
+   git commit -m "Trumpas pakeitimų aprašymas"
+   ```
+5. **Išsiųskite (push) šaką į GitHub:**
+   ```sh
+   git push origin nauja-saka
+   ```
+6. **GitHub svetainėje sukurkite Pull Request, kad jūsų pakeitimai būtų peržiūrėti ir sujungti su pagrindine šaka.**
+
+> Pastaba: Nepamirškite pakeisti nuorodos į savo GitHub paskyrą ir repozitoriją.
+
 ## Kontaktai
 
 Projekto autorius: [Jūsų vardas]
