@@ -1,16 +1,20 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
-const Ticket = require("./Ticket");
-const User = require("./User");
+const mongoose = require("mongoose");
 
-const Answer = sequelize.define("Answer", {
-  answerText: { type: DataTypes.TEXT, allowNull: false },
-});
+const answerSchema = new mongoose.Schema(
+  {
+    answerText: { type: String, required: true },
+    ticketId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ticket",
+      required: true,
+    },
+    adminId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  { timestamps: true },
+);
 
-Answer.belongsTo(Ticket, { foreignKey: "ticketId" });
-Ticket.hasMany(Answer, { foreignKey: "ticketId" });
-
-Answer.belongsTo(User, { foreignKey: "adminId" }); // Atsakymą pateikė adminas
-User.hasMany(Answer, { foreignKey: "adminId" });
-
-module.exports = Answer;
+module.exports = mongoose.model("Answer", answerSchema);

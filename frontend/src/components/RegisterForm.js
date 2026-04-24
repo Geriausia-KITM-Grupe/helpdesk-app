@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function RegisterForm({ onRegister }) {
   const [username, setUsername] = useState("");
@@ -6,12 +6,23 @@ function RegisterForm({ onRegister }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Auto-clear notifications after 5 seconds
+  useEffect(() => {
+    if (error || success) {
+      const timer = setTimeout(() => {
+        setError("");
+        setSuccess("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     try {
-      const res = await fetch("http://localhost:5000/api/users/register", {
+      const res = await fetch("http://localhost:5001/api/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

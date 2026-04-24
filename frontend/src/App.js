@@ -41,7 +41,7 @@ function Dashboard() {
 
   return (
     <div className="row g-4">
-      <div className="col-lg-6">
+      <div className="col-12 col-lg-6 order-2 order-lg-1">
         <div className="card shadow-sm mb-4">
           <div className="card-body">
             <TicketForm onTicketCreated={() => setRefresh((r) => !r)} />
@@ -53,7 +53,7 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="col-lg-6">
+      <div className="col-12 col-lg-6 order-1 order-lg-2">
         <div className="card shadow-sm h-100">
           <div className="card-body">
             <FAQSearch />
@@ -117,13 +117,7 @@ function App() {
           />
           <Route
             path="/dashboard"
-            element={
-              user && user.role === "client" ? (
-                <Dashboard />
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
+            element={user ? <Dashboard /> : <Navigate to="/login" />}
           />
           <Route
             path="/admin"

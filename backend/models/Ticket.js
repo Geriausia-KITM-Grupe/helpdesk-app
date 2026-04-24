@@ -1,17 +1,32 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
-const User = require("./User");
+const mongoose = require("mongoose");
 
-const Ticket = sequelize.define("Ticket", {
-  title: { type: DataTypes.STRING, allowNull: false },
-  description: { type: DataTypes.TEXT, allowNull: false },
-  status: {
-    type: DataTypes.ENUM("pateiktas", "svarstomas", "ispręstas"),
-    defaultValue: "pateiktas",
+const ticketSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    category: {
+      type: String,
+      enum: [
+        "Paskyra",
+        "Techninė pagalba",
+        "Apmokėjimas",
+        "Nustatymai",
+        "Kita",
+      ],
+      default: "Kita",
+    },
+    status: {
+      type: String,
+      enum: ["pateiktas", "svarstomas", "ispręstas"],
+      default: "pateiktas",
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
-});
+  { timestamps: true },
+);
 
-Ticket.belongsTo(User, { foreignKey: "userId" });
-User.hasMany(Ticket, { foreignKey: "userId" });
-
-module.exports = Ticket;
+module.exports = mongoose.model("Ticket", ticketSchema);

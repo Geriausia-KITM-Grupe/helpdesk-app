@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Answer = require("../models/Answer");
 const Ticket = require("../models/Ticket");
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 // Middleware JWT autentifikacijai
@@ -12,7 +11,7 @@ function auth(req, res, next) {
   try {
     const decoded = jwt.verify(
       token.split(" ")[1],
-      process.env.JWT_SECRET || "slaptas_raktas"
+      process.env.JWT_SECRET || "slaptas_raktas",
     );
     req.user = decoded;
     next();
@@ -29,7 +28,7 @@ router.post("/", auth, async (req, res) => {
   if (!ticketId || !answerText)
     return res.status(400).json({ msg: "Užpildykite visus laukus" });
   try {
-    const ticket = await Ticket.findByPk(ticketId);
+    const ticket = await Ticket.findById(ticketId);
     if (!ticket) return res.status(404).json({ msg: "Užklausa nerasta" });
     const answer = await Answer.create({
       ticketId,
@@ -45,10 +44,9 @@ router.post("/", auth, async (req, res) => {
 // Gauti visus atsakymus pagal užklausos ID (klientas arba admin)
 router.get("/ticket/:ticketId", auth, async (req, res) => {
   try {
-    const answers = await Answer.findAll({
-      where: { ticketId: req.params.ticketId },
-      include: [{ model: User, as: "User", attributes: ["username", "role"] }],
-    });
+    const answers = await Answer.find({
+      ticketId: req.params.ticketId,
+    }).populate("adminId", "username role");
     res.json(answers);
   } catch (err) {
     res.status(500).json({ msg: "Serverio klaida", error: err.message });

@@ -3,7 +3,6 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const sequelize = require("../config/db");
 
 // Registracija
 router.post("/register", async (req, res) => {
@@ -12,7 +11,7 @@ router.post("/register", async (req, res) => {
     return res.status(400).json({ msg: "Užpildykite visus laukus" });
   }
   try {
-    const existing = await User.findOne({ where: { username } });
+    const existing = await User.findOne({ username });
     if (existing) {
       return res.status(400).json({ msg: "Toks vartotojas jau egzistuoja" });
     }
@@ -24,7 +23,7 @@ router.post("/register", async (req, res) => {
     });
     res.status(201).json({
       msg: "Registracija sėkminga",
-      user: { id: user.id, username: user.username, role: user.role },
+      user: { id: user._id, username: user.username, role: user.role },
     });
   } catch (err) {
     res.status(500).json({ msg: "Serverio klaida", error: err.message });
@@ -38,7 +37,7 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ msg: "Užpildykite visus laukus" });
   }
   try {
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ msg: "Neteisingi prisijungimo duomenys" });
     }
@@ -47,13 +46,13 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ msg: "Neteisingi prisijungimo duomenys" });
     }
     const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role },
+      { id: user._id, username: user.username, role: user.role },
       process.env.JWT_SECRET || "slaptas_raktas",
-      { expiresIn: "1d" }
+      { expiresIn: "1d" },
     );
     res.json({
       token,
-      user: { id: user.id, username: user.username, role: user.role },
+      user: { id: user._id, username: user.username, role: user.role },
     });
   } catch (err) {
     res.status(500).json({ msg: "Serverio klaida", error: err.message });

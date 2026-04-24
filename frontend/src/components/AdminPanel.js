@@ -7,10 +7,29 @@ function AdminPanel() {
   const [statusUpdate, setStatusUpdate] = useState({});
   const [message, setMessage] = useState("");
 
+  const getStatusBadgeClass = (status) => {
+    switch (status) {
+      case "ispręstas":
+        return "badge bg-success";
+      case "svarstomas":
+        return "badge bg-warning text-dark";
+      default:
+        return "badge bg-danger";
+    }
+  };
+
+  // Auto-clear message after 5 seconds
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   const fetchTickets = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/tickets", {
+      const res = await fetch("http://localhost:5001/api/tickets", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -29,7 +48,7 @@ function AdminPanel() {
     setMessage("");
     try {
       const res = await fetch(
-        `http://localhost:5000/api/tickets/${id}/status`,
+        `http://localhost:5001/api/tickets/${id}/status`,
         {
           method: "PATCH",
           headers: {
@@ -37,19 +56,29 @@ function AdminPanel() {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
           body: JSON.stringify({ status }),
-        }
+        },
       );
       if (res.ok) {
         setMessage("Statusas atnaujintas!");
+        // Clear the status update state for this ticket
+        setStatusUpdate((prev) => {
+          const newState = { ...prev };
+          delete newState[id];
+          return newState;
+        });
         fetchTickets();
+      } else {
+        setMessage("Klaida atnaujinant statusą");
       }
-    } catch {}
+    } catch {
+      setMessage("Serverio klaida");
+    }
   };
 
   const handleAnswer = async (ticketId) => {
     setMessage("");
     try {
-      const res = await fetch("http://localhost:5000/api/answers", {
+      const res = await fetch("http://localhost:5001/api/answers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,25 +108,32 @@ function AdminPanel() {
       ) : (
         <div className="row">
           {tickets.map((t) => (
-            <div key={t.id} className="col-md-6 mb-4">
+            <div key={t._id} className="col-12 col-md-6 col-lg-4 mb-4">
               <div className="card shadow-sm h-100">
                 <div className="card-body">
                   <h5 className="card-title">{t.title}</h5>
+                  <div className="d-flex justify-content-between mb-2">
+                    <span className={`${getStatusBadgeClass(t.status)} me-2`}>
+                      {t.status}
+                    </span>
+                    <span className="badge bg-secondary">
+                      {t.category || "Kita"}
+                    </span>
+                  </div>
                   <p className="card-text">{t.description}</p>
-                  <span className="badge bg-info text-dark me-2">
-                    Statusas: {t.status}
-                  </span>
-                  <span className="badge bg-secondary">
-                    Klientas: {t.User?.username}
-                  </span>
-                  <div className="mt-3">
+                  <div className="mb-2">
+                    <span className="badge bg-secondary">
+                      Klientas: {t.userId?.username}
+                    </span>
+                  </div>
+                  <div className="mt-3 d-flex align-items-center gap-2 flex-wrap">
                     <select
-                      className="form-select form-select-sm w-auto d-inline"
-                      value={statusUpdate[t.id] || t.status}
+                      className="form-select form-select-sm w-auto"
+                      value={statusUpdate[t._id] || t.status}
                       onChange={(e) =>
                         setStatusUpdate((prev) => ({
                           ...prev,
-                          [t.id]: e.target.value,
+                          [t._id]: e.target.value,
                         }))
                       }
                     >
@@ -108,7 +144,10 @@ function AdminPanel() {
                     <button
                       className="btn btn-sm btn-outline-primary ms-2"
                       onClick={() =>
-                        handleStatusChange(t.id, statusUpdate[t.id] || t.status)
+                        handleStatusChange(
+                          t._id,
+                          statusUpdate[t._id] || t.status,
+                        )
                       }
                     >
                       Keisti statusą
@@ -119,17 +158,17 @@ function AdminPanel() {
                       className="form-control"
                       rows={2}
                       placeholder="Atsakymas"
-                      value={answerText[t.id] || ""}
+                      value={answerText[t._id] || ""}
                       onChange={(e) =>
                         setAnswerText((prev) => ({
                           ...prev,
-                          [t.id]: e.target.value,
+                          [t._id]: e.target.value,
                         }))
                       }
                     />
                     <button
                       className="btn btn-sm btn-success mt-2"
-                      onClick={() => handleAnswer(t.id)}
+                      onClick={() => handleAnswer(t._id)}
                     >
                       Atsakyti
                     </button>

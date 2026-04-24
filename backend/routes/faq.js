@@ -10,7 +10,7 @@ function auth(req, res, next) {
   try {
     const decoded = jwt.verify(
       token.split(" ")[1],
-      process.env.JWT_SECRET || "slaptas_raktas"
+      process.env.JWT_SECRET || "slaptas_raktas",
     );
     req.user = decoded;
     next();
@@ -22,11 +22,11 @@ function auth(req, res, next) {
 // Gauti visus FAQ su filtru pagal kategoriją arba paiešką
 router.get("/", async (req, res) => {
   const { category, q } = req.query;
-  let where = {};
-  if (category) where.category = category;
-  if (q) where.question = { $like: `%${q}%` };
+  const filter = {};
+  if (category) filter.category = category;
+  if (q) filter.question = { $regex: q, $options: "i" };
   try {
-    const faqs = await FAQ.findAll({ where, order: [["trustCount", "DESC"]] });
+    const faqs = await FAQ.find(filter).sort({ trustCount: -1 });
     res.json(faqs);
   } catch (err) {
     res.status(500).json({ msg: "Serverio klaida", error: err.message });
@@ -53,7 +53,7 @@ router.post("/", auth, async (req, res) => {
 // Reitinguoti atsakymą (pridėti "patikimą")
 router.patch("/:id/trust", async (req, res) => {
   try {
-    const faq = await FAQ.findByPk(req.params.id);
+    const faq = await FAQ.findById(req.params.id);
     if (!faq) return res.status(404).json({ msg: "FAQ nerastas" });
     faq.trustCount += 1;
     await faq.save();
